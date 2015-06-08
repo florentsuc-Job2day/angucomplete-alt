@@ -460,6 +460,16 @@
           scope.results = [];
         }
 
+        function noAccent(stringWithAccents) {
+          return stringWithAccents
+            .replace(/[èéêë]/g, "e")
+            .replace(/[ç]/g, "c")
+            .replace(/[àâä]/g, "a")
+            .replace(/[ïî]/g, "i")
+            .replace(/[ûùü]/g, "u")
+            .replace(/[ôöó]/g, "o") 
+        }
+
         function getLocalResults(str) {
           var i, match, s, value,
               searchFields = scope.searchFields.split(','),
@@ -470,7 +480,7 @@
 
             for (s = 0; s < searchFields.length; s++) {
               value = extractValue(scope.localData[i], searchFields[s]) || '';
-              match = match || (value.toLowerCase().indexOf(str.toLowerCase()) >= 0);
+              match = match || (noAccent(value.toLowerCase()).indexOf(noAccent(str.toLowerCase())) >= 0);
             }
 
             if (match) {
@@ -575,7 +585,7 @@
           }
           else {
             hideTimer = $timeout(function() {
-              clearResults();
+              //clearResults();
               scope.$apply(function() {
                 if (scope.searchStr && scope.searchStr.length > 0) {
                   inputField.val(scope.searchStr);
